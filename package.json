@@ -1,0 +1,22 @@
+{
+  "name": "sth-vanity",
+  "version": "1.0.0",
+  "description": "SmartHoldem address vanity generator",
+  "keywords": [
+    "smartholdem",
+    "crypto",
+    "address",
+    "generator"
+  ],
+  "license": "MIT",
+  "author": "TechnoL0g",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@smartholdem/client": "^2.0.0",
+    "@smartholdem/crypto": "^3.8.3"
+  }
+}
