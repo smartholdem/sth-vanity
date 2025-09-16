@@ -15,15 +15,36 @@ function generateWallet() {
     return { address, secret: mnemonic };
 }
 
-function findVanityAddress(prefix, processId) {
-    const upperCasePrefix = prefix.toUpperCase();
+/**
+ * Основная функция поиска, которая запускается в дочерних процессах.
+ * @param {string} term - Строка для поиска.
+ * @param {'prefix'|'suffix'|'contains'} mode - Режим поиска.
+ * @param {number} processId - ID процесса.
+ */
+function findVanityAddress(term, mode, processId) {
+    const upperCaseTerm = term.toUpperCase();
     let attempts = 0;
 
     while (true) {
         attempts++;
         const wallet = generateWallet();
-        
-        if (wallet.address.substring(1).startsWith(upperCasePrefix)) {
+        const address = wallet.address;
+        let isMatch = false;
+
+        switch (mode) {
+            case 'suffix':
+                isMatch = address.toUpperCase().endsWith(upperCaseTerm);
+                break;
+            case 'contains':
+                isMatch = address.toUpperCase().includes(upperCaseTerm);
+                break;
+            case 'prefix':
+            default:
+                isMatch = address.substring(1).toUpperCase().startsWith(upperCaseTerm);
+                break;
+        }
+
+        if (isMatch) {
             process.send({ found: true, wallet, attempts, pid: processId });
             process.exit(0);
         }
@@ -36,19 +57,29 @@ function findVanityAddress(prefix, processId) {
 
 function main() {
     const args = process.argv.slice(2);
-    let prefix = args.find(arg => !arg.startsWith('--'));
+    let searchTerm = args.find(arg => !arg.startsWith('--'));
     const threadsArg = args.find(arg => arg.startsWith('--threads='));
+    const modeArg = args.find(arg => arg.startsWith('--mode='));
 
-    if (!prefix) {
+    // Определение режима поиска
+    let mode = 'prefix'; // Режим по умолчанию
+    if (modeArg) {
+        const requestedMode = modeArg.split('=')[1];
+        if (['prefix', 'suffix', 'contains'].includes(requestedMode)) {
+            mode = requestedMode;
+        }
+    }
+
+    if (!searchTerm) {
         if (cluster.isMaster) {
-            console.log("Ошибка: Вы не указали префикс для поиска.");
-            console.log("Пример использования: node index.js MYPREFIX --threads=4");
+            console.log("Ошибка: Вы не указали строку для поиска.");
+            console.log("Пример: node index.js MYPREFIX --mode=prefix --threads=4");
         }
         return;
     }
 
-    if (prefix.toUpperCase().startsWith('S')) {
-        prefix = prefix.substring(1);
+    if (mode === 'prefix' && searchTerm.toUpperCase().startsWith('S')) {
+        searchTerm = searchTerm.substring(1);
     }
 
     if (cluster.isMaster) {
@@ -56,7 +87,7 @@ function main() {
         if (threadsArg) {
             const specified = parseInt(threadsArg.split('=')[1], 10);
             if (specified > 0) {
-                threadsCount = Math.min(specified, numCPUs); // Ограничиваем макс. числом ядер
+                threadsCount = Math.min(specified, numCPUs);
                 console.log(`Будет использовано ${threadsCount} потоков (задано пользователем).`);
             } else {
                 console.log(`Некорректное значение для --threads. Используем все доступные: ${threadsCount}.`);
@@ -64,7 +95,8 @@ function main() {
         }
 
         console.log(`Главный процесс ${process.pid} запущен.`);
-        console.log(`Запускаю ${threadsCount} рабочих процессов для поиска адреса, начинающегося на: S${prefix}...`);
+        console.log(`Режим поиска: '${mode}'. Искомая строка: '${searchTerm}'.`);
+        console.log(`Запускаю ${threadsCount} рабочих процессов...`);
         
         const startTime = Date.now();
         let totalAttempts = 0;
@@ -88,7 +120,6 @@ function main() {
                 console.log(`Адрес        : ${message.wallet.address}`);
                 console.log(`Секретная фраза: ${message.wallet.secret}`);
                 console.log("--------------------------------------------------");
-                console.log("ВАЖНО: Сохраните вашу секретную фразу в надежном месте!");
 
                 for (const id in cluster.workers) {
                     cluster.workers[id].kill();
@@ -108,8 +139,7 @@ function main() {
 
     } else {
         // Это рабочий процесс
-        findVanityAddress(prefix, process.pid);
-        console.log(`Рабочий процесс ${process.pid} запущен.`);
+        findVanityAddress(searchTerm, mode, process.pid);
     }
 }
 
