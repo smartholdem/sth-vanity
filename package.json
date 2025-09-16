@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@smartholdem/client": "^2.0.0",
-    "@smartholdem/crypto": "^3.8.3"
+    "@smartholdem/crypto": "^3.8.3",
+    "bip39": "^3.1.0"
   }
 }
