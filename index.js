@@ -24,13 +24,10 @@ function findVanityAddress(prefix, processId) {
         const wallet = generateWallet();
         
         if (wallet.address.substring(1).startsWith(upperCasePrefix)) {
-            // Отправляем найденный кошелек главному процессу
             process.send({ found: true, wallet, attempts, pid: processId });
-            // Завершаем рабочий процесс
             process.exit(0);
         }
 
-        // Периодически отправляем отчет о проделанной работе
         if (attempts % 2000 === 0) {
             process.send({ found: false, attempts, pid: processId });
         }
@@ -38,31 +35,42 @@ function findVanityAddress(prefix, processId) {
 }
 
 function main() {
-    let prefix = process.argv[2];
+    const args = process.argv.slice(2);
+    let prefix = args.find(arg => !arg.startsWith('--'));
+    const threadsArg = args.find(arg => arg.startsWith('--threads='));
 
     if (!prefix) {
         if (cluster.isMaster) {
             console.log("Ошибка: Вы не указали префикс для поиска.");
-            console.log("Пример использования: node index.js MYPREFIX");
+            console.log("Пример использования: node index.js MYPREFIX --threads=4");
         }
         return;
     }
 
-    // Если пользователь по ошибке ввел 'S' в начале, убираем его.
     if (prefix.toUpperCase().startsWith('S')) {
         prefix = prefix.substring(1);
     }
 
     if (cluster.isMaster) {
+        let threadsCount = numCPUs;
+        if (threadsArg) {
+            const specified = parseInt(threadsArg.split('=')[1], 10);
+            if (specified > 0) {
+                threadsCount = Math.min(specified, numCPUs); // Ограничиваем макс. числом ядер
+                console.log(`Будет использовано ${threadsCount} потоков (задано пользователем).`);
+            } else {
+                console.log(`Некорректное значение для --threads. Используем все доступные: ${threadsCount}.`);
+            }
+        }
+
         console.log(`Главный процесс ${process.pid} запущен.`);
-        console.log(`Запускаю ${numCPUs} рабочих процессов для поиска адреса, начинающегося на: S${prefix}...`);
+        console.log(`Запускаю ${threadsCount} рабочих процессов для поиска адреса, начинающегося на: S${prefix}...`);
         
         const startTime = Date.now();
         let totalAttempts = 0;
-
         const workers = {};
 
-        for (let i = 0; i < numCPUs; i++) {
+        for (let i = 0; i < threadsCount; i++) {
             const worker = cluster.fork();
             workers[worker.process.pid] = { id: i + 1, attempts: 0 };
         }
@@ -82,13 +90,11 @@ function main() {
                 console.log("--------------------------------------------------");
                 console.log("ВАЖНО: Сохраните вашу секретную фразу в надежном месте!");
 
-                // Завершаем все рабочие процессы
                 for (const id in cluster.workers) {
                     cluster.workers[id].kill();
                 }
                 process.exit(0);
             } else {
-                // Обновляем счетчик попыток для рабочего процесса
                 workers[worker.process.pid].attempts = message.attempts;
                 totalAttempts = Object.values(workers).reduce((sum, w) => sum + w.attempts, 0);
                 const speed = Math.round(totalAttempts / ((Date.now() - startTime) / 1000));
