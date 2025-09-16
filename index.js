@@ -38,7 +38,7 @@ function findVanityAddress(prefix, processId) {
 }
 
 function main() {
-    const prefix = process.argv[2];
+    let prefix = process.argv[2];
 
     if (!prefix) {
         if (cluster.isMaster) {
@@ -48,9 +48,14 @@ function main() {
         return;
     }
 
+    // Если пользователь по ошибке ввел 'S' в начале, убираем его.
+    if (prefix.toUpperCase().startsWith('S')) {
+        prefix = prefix.substring(1);
+    }
+
     if (cluster.isMaster) {
         console.log(`Главный процесс ${process.pid} запущен.`);
-        console.log(`Запускаю ${numCPUs} рабочих процессов для поиска адреса с префиксом: S${prefix}...`);
+        console.log(`Запускаю ${numCPUs} рабочих процессов для поиска адреса, начинающегося на: S${prefix}...`);
         
         const startTime = Date.now();
         let totalAttempts = 0;
