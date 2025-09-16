@@ -1,91 +1,91 @@
-# Генератор тщеславных адресов SmartHoldem
+# SmartHoldem Vanity Address Generator
 
-Это консольное приложение на Node.js для генерации "тщеславных" (vanity) адресов для криптовалюты SmartHoldem (STH). Тщеславный адрес — это адрес, который начинается с определенной, заданной пользователем последовательности букв и цифр.
+This is a Node.js console application for generating "vanity" addresses for the SmartHoldem (STH) cryptocurrency. A vanity address is an address that starts with a specific, user-defined sequence of letters and numbers.
 
-## Требования
+## Requirements
 
-*   [Node.js](https://nodejs.org/) (версия 12.x или выше)
+*   [Node.js](https://nodejs.org/) (version 12.x or higher)
 
-## Установка
+## Installation
 
-1.  Склонируйте репозиторий или скачайте файлы.
-2.  Откройте терминал в директории проекта.
-3.  Установите зависимости, выполнив команду:
+1.  Clone the repository or download the files.
+2.  Open a terminal in the project directory.
+3.  Install the dependencies by running the command:
     ```bash
     npm install
     ```
 
-## Использование
+## Usage
 
-Для запуска генератора используйте следующую команду:
+To start the generator, use the following command:
 
 ```bash
-node index.js [СТРОКА_ПОИСКА] [--mode=РЕЖИМ] [--threads=N]
+node index.js [SEARCH_STRING] [--mode=MODE] [--threads=N]
 ```
 
-### Параметры
+### Parameters
 
-*   `[СТРОКА_ПОИСКА]` (обязательный) — желаемая последовательность символов для поиска. Поиск нечувствителен к регистру.
+*   `[SEARCH_STRING]` (required) — the desired sequence of characters to search for. The search is case-insensitive.
 
-*   `--mode=РЕЖИМ` (необязательный) — режим поиска. Может быть одним из следующих:
-    *   `prefix` (по умолчанию): ищет `СТРОКУ_ПОИСКА` в начале адреса (сразу после `S`).
-    *   `suffix`: ищет `СТРОКУ_ПОИСКА` в конце адреса.
-    *   `contains`: ищет `СТРОКУ_ПОИСКА` в любом месте адреса.
+*   `--mode=MODE` (optional) — the search mode. Can be one of the following:
+    *   `prefix` (default): searches for `SEARCH_STRING` at the beginning of the address (immediately after `S`).
+    *   `suffix`: searches for `SEARCH_STRING` at the end of the address.
+    *   `contains`: searches for `SEARCH_STRING` anywhere in the address.
 
-*   `--threads=N` (необязательный) — количество потоков (ядер процессора) для использования. Если не указан, используются все доступные ядра.
+*   `--threads=N` (optional) — the number of threads (CPU cores) to use. If not specified, all available cores are used.
 
-### Примеры
+### Examples
 
-1.  **Поиск по префиксу (по умолчанию)**
+1.  **Search by prefix (default)**
 
-    Найти адрес, начинающийся с `S` + `MYWALLET`:
+    Find an address starting with `S` + `MYWALLET`:
     ```bash
     node index.js MYWALLET
-    # или явно
+    # or explicitly
     node index.js MYWALLET --mode=prefix
     ```
 
-2.  **Поиск по суффиксу**
+2.  **Search by suffix**
 
-    Найти адрес, заканчивающийся на `2025`:
+    Find an address ending in `2025`:
     ```bash
     node index.js 2025 --mode=suffix
     ```
 
-3.  **Поиск по части строки**
+3.  **Search by substring**
 
-    Найти адрес, в котором есть слово `GEMINI`:
+    Find an address that contains the word `GEMINI`:
     ```bash
     node index.js GEMINI --mode=contains
     ```
 
-4.  **Комбинация параметров**
+4.  **Combination of parameters**
 
-    Найти адрес, в котором есть `VIP`, используя только 2 потока:
+    Find an address that contains `VIP`, using only 2 threads:
     ```bash
     node index.js VIP --mode=contains --threads=2
     ```
 
-### Важно
+### Important
 
-*   Поиск нечувствителен к регистру. `mycoolwallet` и `MYCOOLWALLET` дадут одинаковый результат.
-*   Адреса SmartHoldem всегда начинаются с буквы `S`. Скрипт ищет ваш префикс сразу после этой буквы.
-*   Чем длиннее префикс, тем значительно больше времени потребуется на поиск.
+*   The search is case-insensitive. `mycoolwallet` and `MYCOOLWALLET` will produce the same result.
+*   SmartHoldem addresses always start with the letter `S`. The script searches for your prefix immediately after this letter.
+*   The longer the prefix, the significantly more time it will take to search.
 
-## Вывод
+## Output
 
-В процессе работы скрипт будет показывать количество проверенных адресов. Когда подходящий адрес будет найден, программа выведет результат в консоль и завершит работу.
+During operation, the script will show the number of checked addresses. When a suitable address is found, the program will display the result in the console and exit.
 
 ```
-Начинаю поиск адреса с префиксом: SMYCOOLWALLET...
+Starting search for address with prefix: SMYCOOLWALLET...
 
-Найдено за 34.12 секунд!
-Попыток: 845123
+Found in 34.12 seconds!
+Attempts: 845123
 --------------------------------------------------
-Адрес        : SMyCoolWalletGf7kvp8vj6yPzCqRj9nBwX
-Секретная фраза: word1 word2 word3 ... word12
+Address        : SMyCoolWalletGf7kvp8vj6yPzCqRj9nBwX
+Secret phrase: word1 word2 word3 ... word12
 --------------------------------------------------
-ВАЖНО: Сохраните вашу секретную фразу в надежном месте!
+IMPORTANT: Save your secret phrase in a safe place!
 ```
 
-**ВНИМАНИЕ:** Секретная мнемоническая фраза — это единственный способ получить доступ к вашему кошельку. Храните её в безопасности и никогда никому не передавайте.
+**ATTENTION:** The secret mnemonic phrase is the only way to access your wallet. Keep it safe and never share it with anyone.
