@@ -54,9 +54,9 @@ node index.js [SEARCH_STRING] [--mode=MODE] [--threads=N]
 
 3.  **Search by substring**
 
-    Find an address that contains the word `GEMINI`:
+    Find an address that contains the word `KING`:
     ```bash
-    node index.js GEMINI --mode=contains
+    node index.js KING --mode=contains
     ```
 
 4.  **Combination of parameters**

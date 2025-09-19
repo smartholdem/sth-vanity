@@ -54,9 +54,9 @@ node index.js [CHAINE_DE_RECHERCHE] [--mode=MODE] [--threads=N]
 
 3.  **Recherche par sous-chaîne**
 
-    Trouver une adresse contenant le mot `GEMINI` :
+    Trouver une adresse contenant le mot `KING` :
     ```bash
-    node index.js GEMINI --mode=contains
+    node index.js KING --mode=contains
     ```
 
 4.  **Combinaison de paramètres**

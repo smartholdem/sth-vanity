@@ -54,9 +54,9 @@ node index.js [SUCHZEICHENFOLGE] [--mode=MODUS] [--threads=N]
 
 3.  **Suche nach Teilzeichenfolge**
 
-    Finden Sie eine Adresse, die das Wort `GEMINI` enthält:
+    Finden Sie eine Adresse, die das Wort `KING` enthält:
     ```bash
-    node index.js GEMINI --mode=contains
+    node index.js KING --mode=contains
     ```
 
 4.  **Kombination von Parametern**

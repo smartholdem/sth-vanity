@@ -54,9 +54,9 @@ node index.js [CADENA_DE_BÚSQUEDA] [--mode=MODO] [--threads=N]
 
 3.  **Búsqueda por subcadena**
 
-    Encuentre una dirección que contenga la palabra `GEMINI`:
+    Encuentre una dirección que contenga la palabra `KING`:
     ```bash
-    node index.js GEMINI --mode=contains
+    node index.js KING --mode=contains
     ```
 
 4.  **Combinación de parámetros**

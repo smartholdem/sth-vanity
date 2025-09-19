@@ -54,9 +54,9 @@ node index.js [СТРОКА_ПОИСКА] [--mode=РЕЖИМ] [--threads=N]
 
 3.  **Поиск по части строки**
 
-    Найти адрес, в котором есть слово `GEMINI`:
+    Найти адрес, в котором есть слово `KING`:
     ```bash
-    node index.js GEMINI --mode=contains
+    node index.js KING --mode=contains
     ```
 
 4.  **Комбинация параметров**
