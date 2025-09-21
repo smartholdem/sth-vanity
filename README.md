@@ -15,6 +15,16 @@ This is a Node.js console application for generating "vanity" addresses for the 
     npm install
     ```
 
+## Security
+
+This generator is built with security as a top priority, using industry-standard cryptographic libraries.
+
+*   **Cryptographically Secure Randomness**: The generation of your wallet's core secret (the mnemonic phrase) relies on the `bip39` library, which in turn uses Node.js's built-in `crypto.randomBytes` module. This is a Cryptographically Secure Pseudo-Random Number Generator (CSPRNG), ensuring that the initial entropy for your key is high-quality and unpredictable.
+
+*   **Battle-Tested Cryptography**: The address and key pair are derived from the mnemonic phrase using the official `@smartholdem/crypto` library. This library implements the same robust and widely-trusted `secp256k1` elliptic curve cryptography that secures major cryptocurrencies like Bitcoin and Ethereum.
+
+*   **No Data Storage**: This tool does **not** save or transmit any data. The generated address and its corresponding secret mnemonic phrase are only displayed in your console. You are in full control, and it is your responsibility to store the secret phrase in a secure, offline location.
+
 ## Usage
 
 To start the generator, use the following command:
