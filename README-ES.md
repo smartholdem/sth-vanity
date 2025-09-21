@@ -15,6 +15,16 @@ Esta es una aplicación de consola de Node.js para generar direcciones "personal
     npm install
     ```
 
+## Seguridad
+
+Este generador se ha creado con la máxima prioridad en la seguridad, utilizando bibliotecas criptográficas estándar de la industria.
+
+*   **Aleatoriedad criptográficamente segura**: La generación del secreto principal de su billetera (la frase mnemónica) se basa en la biblioteca `bip39`, que a su vez utiliza el módulo `crypto.randomBytes` integrado en Node.js. Se trata de un generador de números pseudoaleatorios criptográficamente seguro (CSPRNG), que garantiza que la entropía inicial de su clave sea de alta calidad e impredecible.
+
+*   **Criptografía probada en batalla**: La dirección y el par de claves se derivan de la frase mnemónica utilizando la biblioteca oficial `@smartholdem/crypto`. Esta biblioteca implementa la misma criptografía de curva elíptica `secp256k1` robusta y ampliamente confiable que protege a las principales criptomonedas como Bitcoin y Ethereum.
+
+*   **Sin almacenamiento de datos**: Esta herramienta **no** guarda ni transmite ningún dato. La dirección generada y su correspondiente frase mnemónica secreta solo se muestran en su consola. Usted tiene el control total y es su responsabilidad almacenar la frase secreta en un lugar seguro y sin conexión.
+
 ## Uso
 
 Para iniciar el generador, use el siguiente comando:

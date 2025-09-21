@@ -15,6 +15,16 @@ Ceci est une application console Node.js pour générer des adresses "personnali
     npm install
     ```
 
+## Sécurité
+
+Ce générateur est conçu avec la sécurité comme priorité absolue, en utilisant des bibliothèques cryptographiques standard de l'industrie.
+
+*   **Aléatoire cryptographiquement sécurisé**: La génération du secret principal de votre portefeuille (la phrase mnémonique) repose sur la bibliothèque `bip39`, qui utilise à son tour le module `crypto.randomBytes` intégré à Node.js. Il s'agit d'un générateur de nombres pseudo-aléatoires cryptographiquement sécurisé (CSPRNG), garantissant que l'entropie initiale de votre clé est de haute qualité et imprévisible.
+
+*   **Cryptographie éprouvée**: L'adresse et la paire de clés sont dérivées de la phrase mnémonique à l'aide de la bibliothèque officielle `@smartholdem/crypto`. Cette bibliothèque implémente la même cryptographie à courbe elliptique `secp256k1` robuste et largement fiable qui sécurise les principales crypto-monnaies comme Bitcoin et Ethereum.
+
+*   **Aucun stockage de données**: Cet outil ne sauvegarde ni ne transmet **aucune** donnée. L'adresse générée et sa phrase mnémonique secrète correspondante ne s'affichent que dans votre console. Vous avez le contrôle total et il est de votre responsabilité de stocker la phrase secrète dans un endroit sécurisé et hors ligne.
+
 ## Utilisation
 
 Pour démarrer le générateur, utilisez la commande suivante :

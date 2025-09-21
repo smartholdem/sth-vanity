@@ -15,6 +15,16 @@ Dies ist eine Node.js-Konsolenanwendung zum Generieren von "Vanity"-Adressen fü
     npm install
     ```
 
+## Sicherheit
+
+Dieser Generator wurde mit höchster Priorität auf Sicherheit entwickelt und verwendet branchenübliche kryptografische Bibliotheken.
+
+*   **Kryptografisch sichere Zufälligkeit**: Die Generierung des Kerngeheimnisses Ihrer Brieftasche (der mnemonischen Phrase) basiert auf der `bip39`-Bibliothek, die wiederum das in Node.js integrierte Modul `crypto.randomBytes` verwendet. Dies ist ein kryptografisch sicherer Pseudozufallszahlengenerator (CSPRNG), der sicherstellt, dass die anfängliche Entropie für Ihren Schlüssel von hoher Qualität und unvorhersehbar ist.
+
+*   **Kampferprobte Kryptographie**: Die Adresse und das Schlüsselpaar werden aus der mnemonischen Phrase unter Verwendung der offiziellen `@smartholdem/crypto`-Bibliothek abgeleitet. Diese Bibliothek implementiert dieselbe robuste und weithin vertrauenswürdige `secp256k1`-Ellipsenkurven-Kryptographie, die große Kryptowährungen wie Bitcoin und Ethereum sichert.
+
+*   **Keine Datenspeicherung**: Dieses Tool speichert oder überträgt **keine** Daten. Die generierte Adresse und die zugehörige geheime mnemonische Phrase werden nur in Ihrer Konsole angezeigt. Sie haben die volle Kontrolle und es liegt in Ihrer Verantwortung, die geheime Phrase an einem sicheren, Offline-Ort aufzubewahren.
+
 ## Verwendung
 
 Um den Generator zu starten, verwenden Sie den folgenden Befehl:
