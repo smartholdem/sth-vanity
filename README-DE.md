@@ -35,6 +35,8 @@ node index.js [SUCHZEICHENFOLGE] [--mode=MODUS] [--threads=N]
 
 ### Parameter
 
+* `--help` — zeigt Hilfsinformationen zum Skript und seinen Parametern an.
+
 *   `[SUCHZEICHENFOLGE]` (erforderlich) — die gewünschte Zeichenfolge, nach der gesucht werden soll. Die Suche ist nicht zwischen Groß- und Kleinschreibung zu unterscheiden.
 
 *   `--mode=MODUS` (optional) — der Suchmodus. Kann einer der folgenden sein:

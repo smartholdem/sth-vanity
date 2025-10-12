@@ -35,6 +35,8 @@ node index.js [CADENA_DE_BÚSQUEDA] [--mode=MODO] [--threads=N]
 
 ### Parámetros
 
+* `--help` — muestra información de ayuda sobre el script y sus parámetros.
+
 *   `[CADENA_DE_BÚSQUEDA]` (obligatorio) — la secuencia de caracteres deseada para buscar. La búsqueda no distingue entre mayúsculas y minúsculas.
 
 *   `--mode=MODO` (opcional) — el modo de búsqueda. Puede ser uno de los siguientes:

@@ -55,8 +55,47 @@ function findVanityAddress(term, mode, processId) {
     }
 }
 
+/**
+ * Выводит справку по использованию.
+ */
+function displayHelp() {
+    console.log(`
+Usage: node index.js [SEARCH_STRING] [--mode=MODE] [--threads=N] [--help]
+
+Parameters:
+  [SEARCH_STRING] (required) — The desired sequence of characters to search for. The search is case-insensitive.
+
+  --mode=MODE (optional) — The search mode. Can be one of the following:
+    - prefix (default): Searches for SEARCH_STRING at the beginning of the address (immediately after 'S').
+    - suffix: Searches for SEARCH_STRING at the end of the address.
+    - contains: Searches for SEARCH_STRING anywhere in the address.
+
+  --threads=N (optional) — The number of threads (CPU cores) to use. If not specified, all available cores are used.
+  
+  --help — Display this help message.
+
+Examples:
+  - Find an address starting with 'S' + 'MYWALLET':
+    node index.js MYWALLET
+
+  - Find an address ending in '2025':
+    node index.js 2025 --mode=suffix
+
+  - Find an address that contains the word 'KING':
+    node index.js KING --mode=contains
+
+  - Get help:
+    node index.js --help
+    `);
+}
+
 function main() {
     const args = process.argv.slice(2);
+
+    if (args.includes('--help')) {
+        displayHelp();
+        return;
+    }
     let searchTerm = args.find(arg => !arg.startsWith('--'));
     const threadsArg = args.find(arg => arg.startsWith('--threads='));
     const modeArg = args.find(arg => arg.startsWith('--mode='));

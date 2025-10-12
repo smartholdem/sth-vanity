@@ -35,6 +35,8 @@ node index.js [CHAINE_DE_RECHERCHE] [--mode=MODE] [--threads=N]
 
 ### Paramètres
 
+* `--help` — affiche des informations d'aide sur le script et ses paramètres.
+
 *   `[CHAINE_DE_RECHERCHE]` (obligatoire) — la séquence de caractères souhaitée à rechercher. La recherche est insensible à la casse.
 
 *   `--mode=MODE` (facultatif) — le mode de recherche. Peut être l'un des suivants :

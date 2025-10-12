@@ -35,6 +35,8 @@ node index.js [SEARCH_STRING] [--mode=MODE] [--threads=N]
 
 ### Parameters
 
+* `--help` — display help information about the script and its parameters.
+
 *   `[SEARCH_STRING]` (required) — the desired sequence of characters to search for. The search is case-insensitive.
 
 *   `--mode=MODE` (optional) — the search mode. Can be one of the following:
