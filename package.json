@@ -6,7 +6,8 @@
     "smartholdem",
     "crypto",
     "address",
-    "generator"
+    "generator",
+    "blockchain"
   ],
   "license": "MIT",
   "author": "TechnoL0g <technolog@smartholdem.io>",
