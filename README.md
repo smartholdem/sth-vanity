@@ -76,7 +76,7 @@ sth-vanity [SEARCH_STRING] [--mode=MODE] [--threads=N]
 
     Find an address that contains `VIP`, using only 2 threads:
     ```bash
-    node index.js VIP --mode=contains --threads=2
+    sth-vanity VIP --mode=contains --threads=2
     ```
 
 ### Important
