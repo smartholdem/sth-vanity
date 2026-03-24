@@ -1,6 +1,6 @@
 {
   "name": "sth-vanity",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "SmartHoldem address vanity generator",
   "keywords": [
     "smartholdem",
@@ -18,6 +18,9 @@
   },
   "type": "commonjs",
   "main": "index.js",
+  "bin": {
+    "sth-vanity": "index.js"
+  },
   "engines": {
     "node": "*"
   },

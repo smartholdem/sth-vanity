@@ -30,7 +30,8 @@ This generator is built with security as a top priority, using industry-standard
 To start the generator, use the following command:
 
 ```bash
-node index.js [SEARCH_STRING] [--mode=MODE] [--threads=N]
+npm i -g sth-vanity
+sth-vanity [SEARCH_STRING] [--mode=MODE] [--threads=N]
 ```
 
 ### Parameters

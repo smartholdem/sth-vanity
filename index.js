@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const { Identities } = require("@smartholdem/crypto");
 const { generateMnemonic } = require("bip39");
 const cluster = require('cluster');
@@ -6,8 +7,8 @@ const os = require('os');
 const numCPUs = os.cpus().length;
 
 /**
- * Генерирует новый случайный кошелек SmartHoldem.
- * @returns {{address: string, secret: string}} Объект с адресом и мнемонической фразой.
+ * Generates a new random SmartHoldem wallet.
+ * @returns {{address: string, secret: string}} An object containing the address and mnemonic phrase.
  */
 function generateWallet() {
     const mnemonic = generateMnemonic();
@@ -16,10 +17,10 @@ function generateWallet() {
 }
 
 /**
- * Основная функция поиска, которая запускается в дочерних процессах.
- * @param {string} term - Строка для поиска.
- * @param {'prefix'|'suffix'|'contains'} mode - Режим поиска.
- * @param {number} processId - ID процесса.
+ * The main search function that runs in child processes.
+ * @param {string} term - The string to search for.
+ * @param {'prefix'|'suffix'|'contains'} mode - The search mode.
+ * @param {number} processId - The process ID.
  */
 function findVanityAddress(term, mode, processId) {
     const upperCaseTerm = term.toUpperCase();
@@ -56,7 +57,7 @@ function findVanityAddress(term, mode, processId) {
 }
 
 /**
- * Выводит справку по использованию.
+ * Displays usage help.
  */
 function displayHelp() {
     console.log(`
@@ -100,8 +101,8 @@ function main() {
     const threadsArg = args.find(arg => arg.startsWith('--threads='));
     const modeArg = args.find(arg => arg.startsWith('--mode='));
 
-    // Определение режима поиска
-    let mode = 'prefix'; // Режим по умолчанию
+    // Determine search mode
+    let mode = 'contains'; // Default mode
     if (modeArg) {
         const requestedMode = modeArg.split('=')[1];
         if (['prefix', 'suffix', 'contains'].includes(requestedMode)) {
@@ -111,8 +112,8 @@ function main() {
 
     if (!searchTerm) {
         if (cluster.isMaster) {
-            console.log("Ошибка: Вы не указали строку для поиска.");
-            console.log("Пример: node index.js MYPREFIX --mode=prefix --threads=4");
+            console.log("Error: You did not specify a search string.");
+            console.log("Example: sth-vanity MYSTRING --mode=contains --threads=4");
         }
         return;
     }
@@ -127,15 +128,15 @@ function main() {
             const specified = parseInt(threadsArg.split('=')[1], 10);
             if (specified > 0) {
                 threadsCount = Math.min(specified, numCPUs);
-                console.log(`Будет использовано ${threadsCount} потоков (задано пользователем).`);
+                console.log(`Using ${threadsCount} threads (user specified).`);
             } else {
-                console.log(`Некорректное значение для --threads. Используем все доступные: ${threadsCount}.`);
+                console.log(`Invalid value for --threads. Using all available: ${threadsCount}.`);
             }
         }
 
-        console.log(`Главный процесс ${process.pid} запущен.`);
-        console.log(`Режим поиска: '${mode}'. Искомая строка: '${searchTerm}'.`);
-        console.log(`Запускаю ${threadsCount} рабочих процессов...`);
+        console.log(`Master process ${process.pid} started.`);
+        console.log(`Search mode: '${mode}'. Search term: '${searchTerm}'.`);
+        console.log(`Starting ${threadsCount} worker processes...`);
         
         const startTime = Date.now();
         let totalAttempts = 0;
@@ -152,12 +153,12 @@ function main() {
                 const duration = (endTime - startTime) / 1000;
                 totalAttempts += message.attempts;
 
-                console.log(`\n\nРабочий процесс #${workers[worker.process.pid].id} (PID: ${worker.process.pid}) нашел адрес!`);
-                console.log(`\nНайдено за ${duration.toFixed(2)} секунд!`);
-                console.log(`Всего попыток: ${totalAttempts}`);
+                console.log(`\n\nWorker process #${workers[worker.process.pid].id} (PID: ${worker.process.pid}) found an address!`);
+                console.log(`\nFound in ${duration.toFixed(2)} seconds!`);
+                console.log(`Total attempts: ${totalAttempts}`);
                 console.log("--------------------------------------------------");
-                console.log(`Адрес        : ${message.wallet.address}`);
-                console.log(`Секретная фраза: ${message.wallet.secret}`);
+                console.log(`Address        : ${message.wallet.address}`);
+                console.log(`Secret phrase: ${message.wallet.secret}`);
                 console.log("--------------------------------------------------");
 
                 for (const id in cluster.workers) {
@@ -168,16 +169,16 @@ function main() {
                 workers[worker.process.pid].attempts = message.attempts;
                 totalAttempts = Object.values(workers).reduce((sum, w) => sum + w.attempts, 0);
                 const speed = Math.round(totalAttempts / ((Date.now() - startTime) / 1000));
-                process.stdout.write(`\rПроверено адресов: ${totalAttempts} | Скорость: ${speed} адр/сек`);
+                process.stdout.write(`\rAddresses checked: ${totalAttempts} | Speed: ${speed} addr/sec`);
             }
         });
 
         cluster.on('exit', (worker, code, signal) => {
-            console.log(`\nРабочий процесс ${worker.process.pid} завершил работу.`);
+            console.log(`\nWorker process ${worker.process.pid} exited.`);
         });
 
     } else {
-        // Это рабочий процесс
+        // This is a worker process
         findVanityAddress(searchTerm, mode, process.pid);
     }
 }
