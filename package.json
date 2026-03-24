@@ -1,6 +1,6 @@
 {
   "name": "sth-vanity",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SmartHoldem address vanity generator",
   "keywords": [
     "smartholdem",
@@ -9,9 +9,17 @@
     "generator"
   ],
   "license": "MIT",
-  "author": "TechnoL0g",
+  "author": "TechnoL0g <technolog@smartholdem.io>",
+  "homepage": "https://github.com/smartholdem/sth-vanity",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smartholdem/sth-vanity.git"
+  },
   "type": "commonjs",
   "main": "index.js",
+  "engines": {
+    "node": "*"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
